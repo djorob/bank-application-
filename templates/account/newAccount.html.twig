@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme AccountForm 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+
+
+<h1 class="d-flex justify-content-end"> enregistrer votre compte </h1>
+
+
+
+<div class="container col-lg-10">
+
+{{ form(AccountForm) }}
+
+ </div>
+
+
+
+
+
+
+
+{% endblock %}
