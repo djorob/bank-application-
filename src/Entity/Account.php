@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,6 +39,16 @@ class Account
      * @ORM\JoinColumn(nullable=false)
      */
     private $userid;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Transactions::class, mappedBy="accountId")
+     */
+    private $transactions;
+
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -87,6 +99,37 @@ class Account
     public function setUserid(?User $userid): self
     {
         $this->userid = $userid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transactions[]
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transactions $transaction): self
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setAccountId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transactions $transaction): self
+    {
+        if ($this->transactions->contains($transaction)) {
+            $this->transactions->removeElement($transaction);
+            // set the owning side to null (unless already changed)
+            if ($transaction->getAccountId() === $this) {
+                $transaction->setAccountId(null);
+            }
+        }
 
         return $this;
     }

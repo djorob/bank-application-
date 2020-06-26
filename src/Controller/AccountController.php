@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Form\AccountForm;
+use App\Form\DepositForm;
 use Symfony\Component\BrowserKit\Request as BrowserKitRequest;
 
 class AccountController extends AbstractController
@@ -85,7 +85,7 @@ class AccountController extends AbstractController
     public function newAccount(Request $request)
     {
         $account = new Account();
-        $form = $this->createForm(AccountForm::class, $account);
+        $form = $this->createForm(DepositForm::class, $account);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

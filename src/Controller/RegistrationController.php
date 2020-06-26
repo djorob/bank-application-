@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Account;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Security\UserAuthenticator;
@@ -46,6 +47,18 @@ class RegistrationController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+
+            // on créer automatiquement le compte et on l'associe a l'utilisateur qui vient de se register
+
+            $newAccount = new Account();
+            $newAccount->setNom(bin2hex(random_bytes(10)));
+            $newAccount->setNumber(random_int(100000 , 500000));
+            $newAccount->setUserid($user);
+            $newAccount->setBalance(50);
+
+            $entityManager->persist($newAccount);
+            $entityManager->flush();
+
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
